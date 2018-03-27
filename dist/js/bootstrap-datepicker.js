@@ -5,8 +5,8 @@
  */
 
 (function(factory){
-    if (typeof define === "function" && define.amd) {
-        define(["jquery"], factory);
+    if (typeof define === 'function' && define.amd) {
+        define(['jquery'], factory);
     } else if (typeof exports === 'object') {
         factory(require('jquery'));
     } else {
@@ -1141,10 +1141,6 @@
 				nextIsDisabled,
 				factor = 1;
 			switch (this.viewMode){
-				case 0:
-					prevIsDisabled = year <= startYear && month <= startMonth;
-					nextIsDisabled = year >= endYear && month >= endMonth;
-					break;
 				case 4:
 					factor *= 10;
 					/* falls through */
@@ -1155,8 +1151,16 @@
 					factor *= 10;
 					/* falls through */
 				case 1:
-					prevIsDisabled = Math.floor(year / factor) * factor <= startYear;
-					nextIsDisabled = Math.floor(year / factor) * factor + factor >= endYear;
+					prevIsDisabled = Math.floor(year / factor) * factor < startYear;
+					nextIsDisabled = Math.floor(year / factor) * factor + factor > endYear;
+					break;
+				case 0:
+					prevIsDisabled = year <= startYear && month < startMonth;
+          if(factor > 1 ){
+            nextIsDisabled = Math.floor(year / factor) * factor + factor >= endYear;
+          } else {
+            nextIsDisabled = Math.floor(year / factor) * factor >= endYear;
+          }
 					break;
 			}
 
@@ -1530,6 +1534,11 @@
 			});
 			$.each(this.pickers, function(i, p){
 				p.setRange(range);
+			});
+		},
+		clearDates: function(){
+			$.each(this.pickers, function(i, p){
+				p.clearDates();
 			});
 		},
 		dateUpdated: function(e){

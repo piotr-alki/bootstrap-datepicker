@@ -1169,7 +1169,11 @@
 					break;
 				case 0:
 					prevIsDisabled = year <= startYear && month < startMonth;
-					nextIsDisabled = year >= endYear && month > endMonth;
+          if(factor > 1 ){
+            nextIsDisabled = Math.floor(year / factor) * factor + factor >= endYear;
+          } else {
+            nextIsDisabled = Math.floor(year / factor) * factor >= endYear;
+          }
 					break;
 			}
 
